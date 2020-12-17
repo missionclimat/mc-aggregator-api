@@ -50,6 +50,9 @@ class Workshop(models.Model):
     )
     workshop_name = models.CharField(max_length=100, help_text="Name of the workshop")
     admin_name = models.CharField(max_length=100, help_text="Name of the admin")
+    # participants_nb = models.IntegerField(
+    #     blank=True, help_text="Number of the participants (only visual help)", null=True
+    # )
     participants_nb = models.IntegerField(
         blank=False, help_text="Number of the participants (only visual help)"
     )
