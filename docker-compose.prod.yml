@@ -1,0 +1,34 @@
+version: "3.4"
+
+services:
+    django:
+        build: 
+          context: .
+          target: django
+        env_file: ./configurations/api/api-production.env      
+        volumes:
+            - .:/src
+            - ./secrets/api:/run/secrets/:ro
+            - staticfiles:/src/aggregator/staticfiles
+  
+    nginx:
+      build:
+        context: .
+        dockerfile: Dockerfile.nginx
+      volumes:
+        - staticfiles:/src/aggregator/staticfiles
+        - ./configurations/nginx:/etc/nginx/conf.d
+        - ./secrets/nginx:/secrets/
+      ports:
+        - 443:443
+
+    postgres:
+      image: postgres:11
+      env_file: ./configurations/postgres/postgres.env
+      volumes:
+      - ./secrets/postgres:/run/secrets/:ro
+      - postgresdata:/var/lib/postgresql/data
+
+volumes:
+    postgresdata:
+    staticfiles:
