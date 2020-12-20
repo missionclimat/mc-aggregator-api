@@ -42,14 +42,12 @@ class WorkshopViewSet(viewsets.ModelViewSet):
         Upon workshop creation, send an email to the workshop's admin with confirmation and access detail
         """
         serializer.save()
-        print(serializer)
-        print(serializer.data)
         send_mail(
             'Confirmation de création d\'atelier',
             'Pour rejoindre votre atelier',
             os.environ.get("EMAIL_HOST_USER", 'mission-climat'),
             [serializer.data["admin_email"]],
-            fail_silently=False,
+            fail_silently=True,
         )
 
     # Add the admin_code param to the schema
