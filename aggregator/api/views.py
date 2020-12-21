@@ -95,7 +95,6 @@ class ResultViewSet(viewsets.ModelViewSet):
         serializer.save()
         if serializer.data["user_email"] != None:
             workshop = Workshop.objects.get(workshop_code=serializer.data["workshop_code"])
-            print(workshop)
             context = {"workshop_name": workshop.workshop_name}
             html_message = render_to_string(
                 'result_confirm_email.html', context)
