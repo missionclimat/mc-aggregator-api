@@ -35,6 +35,7 @@ _What you need before running the app_
 
    Follow the instruction on the website https://docs.docker.com/engine/install/linux-postinstall/
 
+4. Ask an admin for the Secrets files
 
 ### Run the app
 
@@ -43,9 +44,18 @@ Simply enter the command in the root directory :
 docker-compose up
 ```
 
+Then you can access several webapp:
+- Django admin interface: http://0.0.0.0:8000/admin/
+- Django Rest Framework: http://0.0.0.0:8000/ 
+- Redoc ui (api documentation): http://0.0.0.0:8000/redoc/
+- Swagger ui (api documentation): http://0.0.0.0:8000/swagger/
+
+### Run the tests
+
+TODO
+
+
 ### Details about repository structure
-
-
 
     .
     ├── aggregator/              # The django app 
@@ -58,7 +68,7 @@ docker-compose up
     ├── docker-compose.yml       # docker-compose file use for development environment 
     ├── docker-compose.prod.yml  # docker-compose file use for production environment
     ├── Dockerfile               # Dockerfile which generate the django image 
-    ├── Dockerfile.nginx         # Dockerfile which generate the nginx image 
+    ├── Dockerfile.nginx         # Dockerfile which generate the nginx image
     └── README.md
 
 ### Deployment
@@ -76,9 +86,3 @@ cd mc-aggregator-api/
 git pull
 sudo docker-compose -f docker-compose.prod.yml restart 
 ```
-
-3. Pull the new version
-
-It's possible to running several instance of a deployment of one provider side by side (e.g: if there is a lot of files to be parsed by the edgecast parser we can spawn a second instance of the edgecast parser)
-
-Everything is deployed to Rancher and Enix is in charge of the CI/CD.
