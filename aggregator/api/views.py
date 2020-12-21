@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
@@ -44,16 +46,14 @@ class WorkshopViewSet(viewsets.ModelViewSet):
         Upon workshop creation, send an email to the workshop's admin with confirmation and access detail
         """
         serializer.save()
-        email_body = "<p> Votre atelier {workshop_name}, <br>\
-            Pour que les participants envoient leurs résultats dans cet atelier ils devront utiliser ce code {workshop_code} <br>\
-            Pour visualiser les résultats de votre atelier, utilisez ce lien {visualize_result_url}/{workshop_id} <br>\
-            Pour supprimer l'atelier ou les résultats, utilisez ce code {admin_code}</p>".format(
-            workshop_name=serializer.data["workshop_name"], visualize_result_url="https://lysed.mission.climat.io", workshop_id=serializer.data["id"], workshop_code=serializer.data["workshop_code"], admin_code=serializer.data["admin_code"])
-        print(email_body)
+        context = {"workshop_name": serializer.data["workshop_name"], "visualize_result_url": "https://lysed.mission.climat.io/{}".format(serializer.data["id"]), "workshop_code": serializer.data["workshop_code"], "admin_code": serializer.data["admin_code"]}
+        html_message = render_to_string('workshop_confirm_email.html', context)
+        plain_message = strip_tags(html_message)
+        
         send_mail(
             'Votre atelier {} a bien été créé'.format(
                 serializer.data["workshop_name"]),
-            email_body,
+            plain_message,
             os.environ.get("EMAIL_HOST_USER", 'mission-climat'),
             [serializer.data["admin_email"]],
             fail_silently=True,
