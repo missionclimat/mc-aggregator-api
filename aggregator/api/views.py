@@ -24,7 +24,9 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 # This param is added in the schema through the decorator (using drf_yasg)
-admin_code_param = openapi.Parameter('admin_code', openapi.IN_QUERY, description="The admin_code (found in the workshop object) is required to delete results or workshops", type=openapi.TYPE_STRING)
+admin_code_param = openapi.Parameter(
+    'admin_code', openapi.IN_QUERY, description="The admin_code (found in the workshop object) is required to delete results or workshops", type=openapi.TYPE_STRING)
+
 
 class WorkshopViewSet(viewsets.ModelViewSet):
     """
@@ -42,9 +44,16 @@ class WorkshopViewSet(viewsets.ModelViewSet):
         Upon workshop creation, send an email to the workshop's admin with confirmation and access detail
         """
         serializer.save()
+        email_body = "<p> Votre atelier {workshop_name}, <br>\
+            Pour que les participants envoient leurs résultats dans cet atelier ils devront utiliser ce code {workshop_code} <br>\
+            Pour visualiser les résultats de votre atelier, utilisez ce lien {visualize_result_url}/{workshop_id} <br>\
+            Pour supprimer l'atelier ou les résultats, utilisez ce code {admin_code}</p>".format(
+            workshop_name=serializer.data["workshop_name"], visualize_result_url="https://lysed.mission.climat.io", workshop_id=serializer.data["id"], workshop_code=serializer.data["workshop_code"], admin_code=serializer.data["admin_code"])
+        print(email_body)
         send_mail(
-            'Confirmation de création d\'atelier',
-            'Pour rejoindre votre atelier',
+            'Votre atelier {} a bien été créé'.format(
+                serializer.data["workshop_name"]),
+            email_body,
             os.environ.get("EMAIL_HOST_USER", 'mission-climat'),
             [serializer.data["admin_email"]],
             fail_silently=True,
@@ -60,6 +69,7 @@ class WorkshopViewSet(viewsets.ModelViewSet):
             return Response(data={"detail": "Result deleted"}, status=status.HTTP_204_NO_CONTENT)
         return Response(data={"detail": "the admin_code is missing or wrong"}, status=status.HTTP_401_UNAUTHORIZED)
 
+
 class ResultViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Results to be viewed or edited.
@@ -73,8 +83,8 @@ class ResultViewSet(viewsets.ModelViewSet):
     # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-
     # Add the admin_code param to the schema
+
     @swagger_auto_schema(manual_parameters=[admin_code_param])
     def destroy(self, request, pk=None):
 
