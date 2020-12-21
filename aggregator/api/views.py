@@ -12,7 +12,6 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
-
 import os
 
 from api.serializers import WorkshopSerializer, ResultSerializer
@@ -46,10 +45,11 @@ class WorkshopViewSet(viewsets.ModelViewSet):
         Upon workshop creation, send an email to the workshop's admin with confirmation and access detail
         """
         serializer.save()
-        context = {"workshop_name": serializer.data["workshop_name"], "visualize_result_url": "https://lysed.mission.climat.io/{}".format(serializer.data["id"]), "workshop_code": serializer.data["workshop_code"], "admin_code": serializer.data["admin_code"]}
+        context = {"workshop_name": serializer.data["workshop_name"], "visualize_result_url": "https://lysed.mission.climat.io/{}".format(
+            serializer.data["id"]), "workshop_code": serializer.data["workshop_code"], "admin_code": serializer.data["admin_code"]}
         html_message = render_to_string('workshop_confirm_email.html', context)
         plain_message = strip_tags(html_message)
-        
+
         send_mail(
             'Votre atelier {} a bien été créé'.format(
                 serializer.data["workshop_name"]),
@@ -62,6 +62,10 @@ class WorkshopViewSet(viewsets.ModelViewSet):
     # Add the admin_code param to the schema
     @swagger_auto_schema(manual_parameters=[admin_code_param])
     def destroy(self, request, pk=None):
+        """
+        Destroy the object only if the admin_code is found in the request
+        """
+
         instance = self.get_object()
 
         if request.query_params.get('admin_code') == str(instance.admin_code):
@@ -83,10 +87,33 @@ class ResultViewSet(viewsets.ModelViewSet):
     # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    # Add the admin_code param to the schema
+    def perform_create(self, serializer):
+        """
+        Upon result creation, an email is send to the user posting the results (optional)
+        """
 
+        serializer.save()
+        if serializer.data["user_email"] != None:
+            workshop = Workshop.objects.get(workshop_code=serializer.data["workshop_code"])
+            print(workshop)
+            context = {"workshop_name": workshop.workshop_name}
+            html_message = render_to_string(
+                'result_confirm_email.html', context)
+            plain_message = strip_tags(html_message)
+            send_mail(
+                'Confirmation des Résultats',
+                plain_message,
+                os.environ.get("EMAIL_HOST_USER", 'mission-climat'),
+                [serializer.data["user_email"]],
+                fail_silently=True,
+            )
+
+    # Add the admin_code param to the schema
     @swagger_auto_schema(manual_parameters=[admin_code_param])
     def destroy(self, request, pk=None):
+        """
+        Destroy the object only if the admin_code is found in the request        
+        """
 
         instance = self.get_object()
 

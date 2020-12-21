@@ -1,7 +1,7 @@
-<h1 align="center">log-parser</h1>
+<h1 align="center">aggregator-api</h1>
 
 <div align="center">
-  <strong>A <code>python drf</code> api.</strong>
+  <strong>A <code>python drf</code> API</strong>
 </div>
 
 <br/>
@@ -46,7 +46,7 @@ docker-compose up
 
 Then you can access several webapp:
 - Django admin interface: http://0.0.0.0:8000/admin/
-- Django Rest Framework: http://0.0.0.0:8000/ 
+- Django Rest Framework browsable API: http://0.0.0.0:8000/ 
 - Redoc ui (api documentation): http://0.0.0.0:8000/redoc/
 - Swagger ui (api documentation): http://0.0.0.0:8000/swagger/
 
