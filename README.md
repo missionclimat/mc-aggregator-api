@@ -59,7 +59,6 @@ TODO
 
     .
     ├── aggregator/              # The django app 
-    ├── chart/                   # CD stuff run by Rancher
     ├── configurations/          # Configurations files
     ├── etc/                     # Scripts and requirements
     ├── secrets/                 # Sensible data (tokens, password etc)
