@@ -37,7 +37,7 @@ class WorkshopViewSet(viewsets.ModelViewSet):
     queryset = Workshop.objects.all()
     serializer_class = WorkshopSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['workshop_name', 'admin_email', 'admin_name']
+    filterset_fields = ['workshop_name', 'admin_email', 'admin_name', 'workshop_code']
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
