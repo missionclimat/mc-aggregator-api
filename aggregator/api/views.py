@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.http import JsonResponse
 
 from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
@@ -37,7 +38,8 @@ class WorkshopViewSet(viewsets.ModelViewSet):
     queryset = Workshop.objects.all()
     serializer_class = WorkshopSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['workshop_name', 'admin_email', 'admin_name', 'workshop_code']
+    filterset_fields = ['workshop_name',
+                        'admin_email', 'admin_name', 'workshop_code']
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
@@ -94,7 +96,8 @@ class ResultViewSet(viewsets.ModelViewSet):
 
         serializer.save()
         if serializer.data["user_email"] != None:
-            workshop = Workshop.objects.get(workshop_code=serializer.data["workshop_code"])
+            workshop = Workshop.objects.get(
+                workshop_code=serializer.data["workshop_code"])
             context = {"workshop_name": workshop.workshop_name}
             html_message = render_to_string(
                 'result_confirm_email.html', context)
@@ -120,3 +123,21 @@ class ResultViewSet(viewsets.ModelViewSet):
             self.perform_destroy(instance)
             return Response(data={"detail": "Result deleted"}, status=status.HTTP_204_NO_CONTENT)
         return Response(data={"detail": "the admin_code is missing or wrong"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class WorkshopAndResult(APIView):
+
+    http_method_names = ["get"]
+
+    @swagger_auto_schema(responses={200: ResultSerializer(many=True)})
+    def get(self, request):
+        """
+        Return all workshops and results
+        """
+
+        response = {
+            "results": list(Result.objects.all().values()), 
+            "workshops": list(Workshop.objects.all().values())
+            }
+
+        return(JsonResponse(response))

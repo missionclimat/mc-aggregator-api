@@ -58,6 +58,7 @@ TODO
 ### Details about repository structure
 
     .
+    ├── .github/                 # Continuous Deployment 
     ├── aggregator/              # The django app 
     ├── configurations/          # Configurations files
     ├── etc/                     # Scripts and requirements
@@ -72,16 +73,7 @@ TODO
 
 ### Deployment
 
-The api is deployed on an OVH instance https://www.ovh.com/manager/public-cloud/#/pci/projects/fc0a8049104a447dbf7de2eb0011c313/instances/74dd360c-df18-48cf-89d1-72c101b38535
+The api is redeployed each push to master on an OVH instance.
 
-There is no CI/CD for now, so to deploy a new version you must login to the vm and restart the app:
- 1. Add your public ssh key to the instance using the OVH ui.
-https://www.ovh.com/manager/public-cloud/#/pci/projects/fc0a8049104a447dbf7de2eb0011c313/ssh
+You can see the `.github/workflows/main.yml` file and the https://github.com/missionclimat/mc-aggregator-api/actions page for more information. 
 
-2. Run those commands
-```
-ssh ubuntu@146.59.193.54
-cd mc-aggregator-api/
-git pull
-sudo docker-compose -f docker-compose.prod.yml restart 
-```
