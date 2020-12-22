@@ -4,11 +4,11 @@ on:
   # but only for the main branch
   push:
     branches:
-      - main
+      - master
 jobs:
   build:
     name: Build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
