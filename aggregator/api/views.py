@@ -114,7 +114,7 @@ class ResultViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(manual_parameters=[admin_code_param])
     def destroy(self, request, pk=None):
         """
-        Destroy the object only if the admin_code is found in the request        
+        Destroy the object only if the admin_code is found in the request
         """
 
         instance = self.get_object()
@@ -125,19 +125,31 @@ class ResultViewSet(viewsets.ModelViewSet):
         return Response(data={"detail": "the admin_code is missing or wrong"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
+# workshop_schema = {
+
+# }
+
+# both_schema = {
+#     "title": "wokrshopsandresults",
+#     "description": "Object containing both workshops and results objects",
+#     "type": "object",
+#     "properties": {"workshop": workshop_schema}
+# }
+
+
 class WorkshopAndResult(APIView):
 
     http_method_names = ["get"]
 
-    @swagger_auto_schema(responses={200: ResultSerializer(many=True)})
+    @swagger_auto_schema(responses={200 :"bruh"})
     def get(self, request):
         """
         Return all workshops and results
         """
 
         response = {
-            "results": list(Result.objects.all().values()), 
+            "results": list(Result.objects.all().values()),
             "workshops": list(Workshop.objects.all().values())
-            }
+        }
 
         return(JsonResponse(response))
