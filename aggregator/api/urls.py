@@ -20,6 +20,11 @@ schema_view = get_schema_view(
       description="The aggregator api is used to manage Workshop and results. This documentation is generated automatically and describe the routes available",
       contact=openapi.Contact(email="hugo.rochefort.pro@gmail.com"),
       license=openapi.License(name="BSD License"),
+      x_logo={
+            "url": "https://res.cloudinary.com/pascal-bes/image/upload/v1588762986/mc512_dgs676.png",
+            # "url": "https://mission-climat.io/images/Illustration%20Home.png",
+            "backgroundColor": "#FFFFFF"
+        }
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
