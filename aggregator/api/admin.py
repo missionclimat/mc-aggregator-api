@@ -14,6 +14,7 @@ class WorkshopAdmin(admin.ModelAdmin):
         "admin_name",
         "admin_email",
         "participants_nb",
+        "email_access_sent_nb"
     )
     list_filter = ("workshop_name", "admin_name")
     search_fields = ["workshop_name"]

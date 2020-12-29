@@ -60,6 +60,11 @@ class Workshop(models.Model):
         help_text="Email of the admin used to send him an email with all the informations"
     )
 
+    email_access_sent_nb = models.IntegerField(
+        default=0,
+        help_text="Number of email result access sent to the users (use to limit the nb of email to avoid spam)"
+    )
+
     def __str__(self):
         return str(self.workshop_code)
 

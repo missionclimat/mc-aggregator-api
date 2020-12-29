@@ -8,25 +8,8 @@ class WorkshopSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='data'
      )
+
     class Meta:
-
-        # Override all the schema fields if cannot override only "results" 
-
-        # swagger_schema_fields = {
-        #     "type": openapi.TYPE_OBJECT,
-        #     "title": "Email",
-        #     "properties": {
-        #         "subject": openapi.Schema(
-        #             title="Email subject",
-        #             type=openapi.TYPE_STRING,
-        #         ),
-        #         "body": openapi.Schema(
-        #             title="Email body",
-        #             type=openapi.TYPE_STRING,
-        #         ),
-        #     },
-        #     "required": ["subject", "body"],
-        #  }
 
         model = Workshop
         fields = ['id', 'workshop_code', 'admin_code', 'results', 'workshop_name', 'admin_name', 'admin_email', 'participants_nb']
@@ -36,3 +19,18 @@ class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Result
         fields = ["id", "data", "workshop_code", "user_email", "group_name"]
+
+
+
+# Only for documentation
+class WorkshopSerializerWithoutResults(serializers.ModelSerializer):
+    class Meta:
+        model = Workshop
+        fields = ['id', 'workshop_code', 'admin_code', 'workshop_name', 'admin_name', 'admin_email', 'participants_nb']
+
+
+
+class WorkshopsAndResultsSerializer(serializers.Serializer):
+
+    workshops = WorkshopSerializerWithoutResults(many=True)
+    results = ResultSerializer(many=True)
