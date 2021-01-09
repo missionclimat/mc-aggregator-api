@@ -112,6 +112,7 @@ class ResultViewSet(viewsets.ModelViewSet):
                 os.environ.get("EMAIL_HOST_USER", 'mission-climat'),
                 [serializer.data["user_email"]],
                 fail_silently=True,
+                html_message=html_message
             )
 
     # Add the admin_code param to the schema
