@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title> <strong> Votre atelier {{workshop_name}} a été créé </strong> </title>
-  </head>
   <body>
-  <p>
-      Pour que les participants envoient leurs résultats dans cet atelier ils devront utiliser ce code {{workshop_code}} <br>
-      Pour visualiser les résultats de votre atelier, utilisez ce lien {{visualize_result_url}} <br>
-      Pour supprimer l'atelier ou les résultats, utilisez ce code {{admin_code}}</p>
+    <p>Bonjour</p>
+    <p>Votre atelier Mission Climat <b>{{workshop_name}}</b> a bien été créé.</p>
+    <p>
+      Voici les informations principales à conserver :
+      <br/><br/>
+      
+      Lien de consultation des résultats agrégés de votre atelier :<br/>
+      <b>{{visualize_result_url}}</b>
+      <br/><br/>
+      
+      Le code atelier à transmettre aux participants, utile au moment de la validation du scénario (afin de lier leur travail à votre atelier) :<br/>
+      <b>{{workshop_code}}</b>
+      <br/><br/>
+      
+      Le code administrateur, utile pour éditer ou supprimer l'atelier, à ne pas partager :<br/>
+      <b>{{admin_code}}</b>
+      <br/><br/>
+      
+    </p>
   </body>
 </html>
