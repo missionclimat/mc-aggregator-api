@@ -48,7 +48,8 @@ class WorkshopViewSet(viewsets.ModelViewSet):
         Upon workshop creation, send an email to the workshop's admin with confirmation and access detail
         """
         serializer.save()
-        context = {"workshop_name": serializer.data["workshop_name"], "visualize_result_id": serializer.data["id"],
+        context = {"admin_name": serializer.data["admin_name"],
+                   "workshop_name": serializer.data["workshop_name"], "visualize_result_id": serializer.data["id"],
                    "workshop_code": serializer.data["workshop_code"], "admin_code": serializer.data["admin_code"]}
         html_message = render_to_string('workshop_confirm_email.html', context)
         plain_message = strip_tags(html_message)
