@@ -48,8 +48,8 @@ class WorkshopViewSet(viewsets.ModelViewSet):
         Upon workshop creation, send an email to the workshop's admin with confirmation and access detail
         """
         serializer.save()
-        context = {"workshop_name": serializer.data["workshop_name"], "visualize_result_url": "https://lysed.mission.climat.io/{}".format(
-            serializer.data["id"]), "workshop_code": serializer.data["workshop_code"], "admin_code": serializer.data["admin_code"]}
+        context = {"workshop_name": serializer.data["workshop_name"], "visualize_result_id": serializer.data["id"],
+                   "workshop_code": serializer.data["workshop_code"], "admin_code": serializer.data["admin_code"]}
         html_message = render_to_string('workshop_confirm_email.html', context)
         plain_message = strip_tags(html_message)
 
@@ -60,6 +60,7 @@ class WorkshopViewSet(viewsets.ModelViewSet):
             os.environ.get("EMAIL_HOST_USER", 'mission-climat'),
             [serializer.data["admin_email"]],
             fail_silently=True,
+            html_message=html_message
         )
 
     # Add the admin_code param to the schema
@@ -176,7 +177,7 @@ class SendResultAccessEmail(APIView):
         if len(recipient_list) > 0:
 
             context = {
-                "visualize_result_url": "https://lysed.mission.climat.io/{}".format(workshop.id)}
+                "visualize_result_id": workshop.id}
 
             html_message = render_to_string(
                 'result_access_email.html', context)
@@ -188,7 +189,7 @@ class SendResultAccessEmail(APIView):
                                      "EMAIL_HOST_USER", 'mission-climat'),
                                  [],
                                  recipient_list)
-            
+
             email.send()
             workshop.email_access_sent_nb += 1
             workshop.save()
