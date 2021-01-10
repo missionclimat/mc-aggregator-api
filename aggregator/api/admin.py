@@ -22,7 +22,7 @@ class WorkshopAdmin(admin.ModelAdmin):
 
 class ResultAdmin(admin.ModelAdmin):
     list_display = ("id", "workshop_code", "user_email", "group_name")
-    list_filter = ("workshop_code", "group_name", "user_email")
+    list_filter = ("workshop_code__workshop_name", "group_name", "user_email", "workshop_code")
     search_fields = ["workshop_code__admin_name", "group_name"]
 
 
