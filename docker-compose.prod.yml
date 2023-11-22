@@ -10,6 +10,7 @@ services:
             - .:/src
             - ./secrets/api:/run/secrets/:ro
             - staticfiles:/src/aggregator/staticfiles
+        restart: always
   
     nginx:
       build:
@@ -21,6 +22,7 @@ services:
         - ./secrets/nginx:/secrets/
       ports:
         - 443:443
+      restart: always
 
     postgres:
       image: postgres:11
@@ -28,6 +30,7 @@ services:
       volumes:
       - ./secrets/postgres:/run/secrets/:ro
       - postgresdata:/var/lib/postgresql/data
+      restart: always
 
 volumes:
     postgresdata:
